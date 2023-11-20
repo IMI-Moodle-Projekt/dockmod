@@ -1,0 +1,66 @@
+<?php
+// Diese Datei ist Teil des Moodle-Plugins.
+
+namespace tool_meinplugin\event;
+
+use coding_exception;
+use core\event\base;
+use context_system;
+use moodle_url;
+
+/**
+ * Ereignis für die Generierung von Ressourcen für eine Vorlesung.
+ *
+ * @package     tool_meinplugin
+ * @copyright   2023 Ihr Name <ihre@email.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 oder später
+ */
+class lecture_resources_generated extends base {
+    /**
+     * Setzt grundlegende Eigenschaften für das Ereignis.
+     */
+    protected function init(): void {
+        $this->data['crud'] = 'c'; // c für create
+        $this->data['edulevel'] = base::LEVEL_OTHER;
+        $this->data['objecttable'] = 'tool_meinplugin_lecture_resources';
+        $this->context = context_system::instance();
+    }
+
+    /**
+     * Gibt den lokalisierten generellen Ereignisnamen zurück.
+     *
+     * @return string
+     */
+    public static function get_name(): string {
+        return get_string('eventlectureresourcesgenerated', 'tool_meinplugin');
+    }
+
+    /**
+     * Gibt die nicht lokalisierte Ereignisbeschreibung mit IDs für den Admin-Bereich zurück.
+     *
+     * @return string
+     */
+    public function get_description(): string {
+        return 'Der Benutzer mit der ID '. $this->userid . ' hat automatisch Ressourcen für die Vorlesung '.
+            $this->other['lectureid'] . ' generiert.';
+    }
+
+    /**
+     * Gibt die relevante URL zurück.
+     * @return moodle_url
+     */
+    public function get_url(): moodle_url {
+        return new moodle_url('/admin/tool/meinplugin/index.php#lecture'.$this->other['lectureid']);
+    }
+
+    /**
+     * Überprüft, ob die "other"-Eigenschaft des Ereignisses korrekt gesetzt wurde.
+     */
+    protected function validate_data(): void {
+        parent::validate_data();
+
+        if (!isset($this->other['lectureid'])) {
+            throw new coding_exception('Der Wert \'lectureid\' muss in "other" gesetzt sein.');
+        }
+    }
+}

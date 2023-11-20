@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/dockmod/db" VERSION="20231113" COMMENT="XMLDB file for Moodle mod_dockmod"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  
+CREATE TABLE lernmaterialien (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titel VARCHAR(255) NOT NULL,
+    beschreibung TEXT,
+    autor VARCHAR(100),
+    dateiformat VARCHAR(50),
+    keywords TEXT,
+    datum_erstellt DATE
+);
+</XMLDB>
